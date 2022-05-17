@@ -2,6 +2,8 @@ import { lazy, Suspense } from 'react'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import './App.css'
 import { Header } from './layouts'
+import CircularProgress from '@mui/material/CircularProgress'
+import { Box } from '@mui/material'
 
 const SignIn = lazy(() => import('./views/SignIn'))
 const SignUp = lazy(() => import('./views/SignUp'))
@@ -13,7 +15,13 @@ function App(): JSX.Element {
       <Router>
         <Header />
 
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense
+          fallback={
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 5 }}>
+              <CircularProgress />
+            </Box>
+          }
+        >
           <Routes>
             <Route path='/signin' element={<SignIn />} />
             <Route path='/signup' element={<SignUp />} />
