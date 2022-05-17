@@ -37,6 +37,8 @@ export default function ForgotPassword() {
               id='email'
               label='Email Address'
               autoComplete='email'
+              error={Boolean(errors?.email?.message)}
+              helperText={errors?.email?.message}
               {...register('email')}
             />
           </Grid>
