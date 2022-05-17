@@ -1,26 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { lazy, Suspense } from 'react'
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
+import './App.css'
+import { Header } from './layouts'
 
-function App() {
+const SignIn = lazy(() => import('./views/SignIn'))
+const SignUp = lazy(() => import('./views/SignUp'))
+const ForgotPassword = lazy(() => import('./views/ForgotPassword'))
+
+function App(): JSX.Element {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <Router>
+        <Header />
+
+        <Suspense fallback={<div>Loading...</div>}>
+          <Routes>
+            <Route path='/signin' element={<SignIn />} />
+            <Route path='/signup' element={<SignUp />} />
+            <Route path='/forgot-password' element={<ForgotPassword />} />
+          </Routes>
+        </Suspense>
+      </Router>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
