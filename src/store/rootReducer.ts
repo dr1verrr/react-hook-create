@@ -1,6 +1,18 @@
-export const rootReducer = (initialState = {}, action: ReducerAction) => {}
+import { User } from 'firebase/auth'
+import { SET_USER } from './types'
 
-export interface ReducerAction {
+type ReducerStateType = object | null | User
+type ReducerActionType = {
   type: string
-  payload: object
+  payload: User | null
+}
+
+export const rootReducer = (state: ReducerStateType = {}, action: ReducerActionType) => {
+  switch (action.type) {
+    case SET_USER:
+      return action.payload
+
+    default:
+      return state
+  }
 }

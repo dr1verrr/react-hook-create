@@ -1,18 +1,46 @@
 import { Box } from '@mui/material'
 import CircularProgress from '@mui/material/CircularProgress'
-import { lazy, Suspense } from 'react'
+import { onAuthStateChanged, User } from 'firebase/auth'
+import { lazy, Suspense, useEffect } from 'react'
+import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { store } from '.'
 import './App.css'
-import { AuthProvider } from './contexts'
+import { getAuthData } from './app/auth'
 import { Header } from './layouts'
+import { setUser } from './store/actions'
 
-const SignIn = lazy(() => import('./views/SignIn'))
-const SignUp = lazy(() => import('./views/SignUp'))
-const ForgotPassword = lazy(() => import('./views/ForgotPassword'))
+const Home = lazy(() => import('./views/Home/Home'))
+const SignIn = lazy(() => import('./views/SignIn/SignIn'))
+const SignUp = lazy(() => import('./views/SignUp/SignUp'))
+const ForgotPassword = lazy(() => import('./views/ForgotPassword/ForgotPassword'))
 
 function App(): JSX.Element {
+  useEffect(() => {
+    onAuthStateChanged(getAuthData(), (user: User | null) => {
+      console.log(
+        {
+          displayName: user?.displayName,
+          email: user?.email,
+          emailVerified: user?.emailVerified,
+          photoURL: user?.photoURL,
+        },
+        user
+      )
+
+      store.dispatch(
+        setUser({
+          displayName: user?.displayName,
+          email: user?.email,
+          emailVerified: user?.emailVerified,
+          photoURL: user?.photoURL,
+        })
+      )
+    })
+  }, [])
+
   return (
-    <AuthProvider>
+    <Provider store={store}>
       <Router>
         <Header />
 
@@ -24,13 +52,14 @@ function App(): JSX.Element {
           }
         >
           <Routes>
+            <Route path='/' element={<Home />} />
             <Route path='/signin' element={<SignIn />} />
             <Route path='/signup' element={<SignUp />} />
             <Route path='/forgot-password' element={<ForgotPassword />} />
           </Routes>
         </Suspense>
       </Router>
-    </AuthProvider>
+    </Provider>
   )
 }
 
