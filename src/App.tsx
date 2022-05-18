@@ -1,9 +1,10 @@
-import { lazy, Suspense } from 'react'
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
-import './App.css'
-import { Header } from './layouts'
-import CircularProgress from '@mui/material/CircularProgress'
 import { Box } from '@mui/material'
+import CircularProgress from '@mui/material/CircularProgress'
+import { lazy, Suspense } from 'react'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import './App.css'
+import { AuthProvider } from './contexts'
+import { Header } from './layouts'
 
 const SignIn = lazy(() => import('./views/SignIn'))
 const SignUp = lazy(() => import('./views/SignUp'))
@@ -11,7 +12,7 @@ const ForgotPassword = lazy(() => import('./views/ForgotPassword'))
 
 function App(): JSX.Element {
   return (
-    <div className='App'>
+    <AuthProvider>
       <Router>
         <Header />
 
@@ -29,7 +30,7 @@ function App(): JSX.Element {
           </Routes>
         </Suspense>
       </Router>
-    </div>
+    </AuthProvider>
   )
 }
 
