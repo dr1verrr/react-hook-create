@@ -12,7 +12,7 @@ import {
   Checkbox,
   Grid,
 } from '@mui/material'
-import { AuthButtons, Copyright } from '../components'
+import { AuthButtons, Copyright } from '../../components'
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
