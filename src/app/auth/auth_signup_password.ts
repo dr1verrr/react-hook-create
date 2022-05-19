@@ -11,6 +11,7 @@ const signup = async (email: string, password: string) => {
     const errorCode = error.code
     const errorMessage = error.message
     console.log(errorCode, errorMessage)
+    return error
   }
 }
 
