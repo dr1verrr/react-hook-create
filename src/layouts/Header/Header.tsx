@@ -4,7 +4,8 @@ import { Box } from '@mui/system'
 import { Link } from 'react-router-dom'
 import { Button } from '@mui/material'
 import { FC } from 'react'
-import { AuthLink } from '../../components'
+import { Authenticated } from 'components'
+import { signout } from 'app/auth'
 
 const Header: FC = () => {
   return (
@@ -34,11 +35,11 @@ const Header: FC = () => {
               </Link>
             </Box>
 
-            <AuthLink>
+            <Authenticated showAlternative altCallback={signout}>
               <Button variant='text' color='inherit'>
                 Sign in
               </Button>
-            </AuthLink>
+            </Authenticated>
           </Stack>
         </Toolbar>
       </AppBar>
