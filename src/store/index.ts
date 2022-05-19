@@ -1,4 +1,6 @@
-import { reducer } from './reducer/reducer.reducers'
-import { rootReducer } from './rootReducer'
+import rootReducer from './rootReducer'
+import store from './store'
+import uiReducer from './ui/ui.reducers'
+import userReducer from './user/user.reducers'
 
-export { reducer, rootReducer }
+export { userReducer, rootReducer, store, uiReducer }

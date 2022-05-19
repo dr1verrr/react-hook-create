@@ -1,18 +1,7 @@
-import { User } from 'firebase/auth'
-import { SET_USER } from './types'
+import { combineReducers } from 'redux'
+import uiReducer from './ui/ui.reducers'
+import userReducer from './user/user.reducers'
 
-type ReducerStateType = object | null | User
-type ReducerActionType = {
-  type: string
-  payload: User | null
-}
+const rootReducer = combineReducers({ ui: uiReducer, user: userReducer })
 
-export const rootReducer = (state: ReducerStateType = {}, action: ReducerActionType) => {
-  switch (action.type) {
-    case SET_USER:
-      return action.payload
-
-    default:
-      return state
-  }
-}
+export default rootReducer
