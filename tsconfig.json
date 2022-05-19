@@ -10,10 +10,11 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": false,
     "noEmit": true,
+    "baseUrl": "./src",
     "jsx": "react-jsx"
   },
   "include": ["src"]
