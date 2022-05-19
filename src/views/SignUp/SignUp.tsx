@@ -1,33 +1,25 @@
-import LinkMui from '@mui/material/Link'
+import { yupResolver } from '@hookform/resolvers/yup'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import {
-  Container,
-  Typography,
-  Box,
   Avatar,
+  Box,
   Button,
+  Container,
   CssBaseline,
-  TextField,
   Grid,
+  TextField,
+  Typography,
 } from '@mui/material'
-import { AuthButtons, Copyright } from '../../components'
-import { Link } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
+import LinkMui from '@mui/material/Link'
+import { signup } from 'app/auth'
 import { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import { Link } from 'react-router-dom'
+import { errorHandler } from 'utils'
+import * as yup from 'yup'
+import { AuthButtons, Copyright } from '../../components'
 
 const schema = yup.object().shape({
-  firstName: yup
-    .string()
-    .required('First Name is a required field')
-    .min(3, 'First Name must be at least 3 characters')
-    .max(30, 'First Name must be at most 30 characters'),
-  lastName: yup
-    .string()
-    .required('Last Name is a required field')
-    .min(3, 'Last Name must be at least 3 characters')
-    .max(30, 'Last Name must be at most 30 characters'),
   email: yup.string().required('Email is a required field').email('Invalid email format').max(40),
   password: yup.string().required('Password is a required field').min(5).max(50),
 })
@@ -40,10 +32,10 @@ export default function SignUp() {
   } = useForm({ resolver: yupResolver(schema) })
 
   useEffect(() => {
-    console.log(errors)
+    console.log('Form errors', errors)
   }, [errors])
 
-  const onSubmit = (data: any) => console.log(data, errors)
+  const onSubmit = (data: any) => errorHandler(() => signup(data.email, data.password))
 
   return (
     <Container component='main' maxWidth='xs'>
@@ -64,31 +56,6 @@ export default function SignUp() {
         </Typography>
         <Box component='form' noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete='given-name'
-                fullWidth
-                required
-                id='firstName'
-                label='First Name'
-                autoFocus
-                error={Boolean(errors?.firstName?.message)}
-                helperText={errors?.firstName?.message}
-                {...register('firstName')}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                fullWidth
-                id='lastName'
-                label='Last Name'
-                autoComplete='family-name'
-                error={Boolean(errors?.lastName?.message)}
-                helperText={errors?.lastName?.message}
-                {...register('lastName')}
-              />
-            </Grid>
             <Grid item xs={12}>
               <TextField
                 required

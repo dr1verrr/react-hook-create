@@ -1,23 +1,23 @@
-import LinkMui from '@mui/material/Link'
+import { yupResolver } from '@hookform/resolvers/yup'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import {
-  Container,
-  Typography,
-  Box,
   Avatar,
+  Box,
   Button,
+  Container,
   CssBaseline,
-  TextField,
-  FormControlLabel,
-  Checkbox,
   Grid,
+  TextField,
+  Typography,
 } from '@mui/material'
-import { AuthButtons, Copyright } from '../../components'
-import { Link } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
+import LinkMui from '@mui/material/Link'
+import { signin } from 'app/auth'
 import { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import { Link } from 'react-router-dom'
+import { errorHandler } from 'utils'
+import * as yup from 'yup'
+import { AuthButtons, Copyright } from '../../components'
 
 const schema = yup.object().shape({
   email: yup.string().required('Email is a required field').email('Invalid email format').max(40),
@@ -31,7 +31,7 @@ export default function SignIn() {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) })
 
-  const onSubmit = (data: any) => console.log(data)
+  const onSubmit = (data: any) => errorHandler(() => signin(data.email, data.password))
 
   useEffect(() => {
     console.log(errors)
@@ -79,10 +79,7 @@ export default function SignIn() {
             autoComplete='current-password'
             {...register('password')}
           />
-          <FormControlLabel
-            control={<Checkbox color='primary' defaultValue='false' {...register('remember')} />}
-            label='Remember me'
-          />
+
           <Box
             display={'flex'}
             flexWrap={'wrap'}
