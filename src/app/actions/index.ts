@@ -1,5 +1,5 @@
-import resetPassword from './actions.password.reset'
-import emailVerify from './actions.email.verify'
-import { actionCodeSettings } from './actions.settings'
+import resetPassword from './actions_password_reset'
+import emailVerify from './actions_email_verify'
+import { actionCodeSettings } from './actions_settings'
 
 export { resetPassword, emailVerify, actionCodeSettings }

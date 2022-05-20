@@ -5,14 +5,7 @@ const signinWithGooglePopup = async () => {
   const auth = getAuth(app)
   const googleProvider = new GoogleAuthProvider()
 
-  try {
-    await signInWithPopup(auth, googleProvider)
-  } catch (error: any) {
-    const errorCode = error.code
-    const errorMessage = error.message
-    console.log(errorCode, errorMessage)
-    return error
-  }
+  return await signInWithPopup(auth, googleProvider)
 }
 
 export default signinWithGooglePopup

@@ -5,15 +5,7 @@ const signinWithGithubPopup = async () => {
   const auth = getAuth(app)
   const githubProvider = new GithubAuthProvider()
 
-  try {
-    await signInWithPopup(auth, githubProvider)
-  } catch (error: any) {
-    const errorCode = error.code
-    const errorMessage = error.message
-    console.log(errorCode, errorMessage)
-
-    return error
-  }
+  return await signInWithPopup(auth, githubProvider)
 }
 
 export default signinWithGithubPopup
