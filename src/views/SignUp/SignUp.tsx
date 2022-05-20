@@ -11,10 +11,12 @@ import {
   Typography,
 } from '@mui/material'
 import LinkMui from '@mui/material/Link'
+import { emailVerify } from 'app/actions'
 import { signup } from 'app/auth'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { errorHandler } from 'utils'
 import * as yup from 'yup'
 import { AuthButtons, Copyright } from '../../components'
@@ -35,7 +37,16 @@ export default function SignUp() {
     console.log('Form errors', errors)
   }, [errors])
 
-  const onSubmit = (data: any) => errorHandler(() => signup(data.email, data.password))
+  const onSubmit = (data: any) => {
+    errorHandler(() =>
+      signup(data.email, data.password).then(user => {
+        toast(`User with email: ${user.email} successfully registered`)
+        emailVerify(user).then(() => {
+          toast('Sent email verification link. Please check your spam folder')
+        })
+      })
+    )
+  }
 
   return (
     <Container component='main' maxWidth='xs'>
@@ -54,7 +65,13 @@ export default function SignUp() {
         <Typography component='h1' variant='h5'>
           Sign up
         </Typography>
-        <Box component='form' noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
+        <Box
+          component='form'
+          autoComplete='true'
+          noValidate
+          onSubmit={handleSubmit(onSubmit)}
+          sx={{ mt: 3 }}
+        >
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
