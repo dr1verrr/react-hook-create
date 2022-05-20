@@ -26,7 +26,7 @@ function App(): JSX.Element {
       store.dispatch(setUser(user ? getWithSpecificFields(user) : null))
 
       if (userChecked.current) {
-        toast(user ? 'Authenticated' : 'Logged out')
+        toast(user ? 'Authenticated' : 'Logged out', { type: 'info' })
       }
       if (!userChecked.current) userChecked.current = true
     })

@@ -37,15 +37,15 @@ export default function SignUp() {
     console.log('Form errors', errors)
   }, [errors])
 
-  const onSubmit = (data: any) => {
-    errorHandler(() =>
-      signup(data.email, data.password).then(user => {
-        toast(`User with email: ${user.email} successfully registered`)
+  const onSubmit = ({ email, password }: any) => {
+    errorHandler(() => {
+      signup(email, password).then(user => {
+        toast(`User with email: ${user.email} successfully registered`, { type: 'success' })
         emailVerify(user).then(() => {
-          toast('Sent email verification link. Please check your spam folder')
+          toast('Sent email verification link. Please check your spam folder', { type: 'info' })
         })
       })
-    )
+    })
   }
 
   return (

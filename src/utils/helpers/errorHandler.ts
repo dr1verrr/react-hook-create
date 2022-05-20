@@ -6,7 +6,7 @@ const errorHandler = async (cb: Function) => {
   try {
     return await cb()
   } catch (error: any) {
-    toast(error.message)
+    toast(error.message, { type: 'error' })
     store.dispatch(
       updateUI({
         errors: { ...error },
