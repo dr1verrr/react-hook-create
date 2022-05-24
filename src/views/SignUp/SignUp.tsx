@@ -8,7 +8,7 @@ import {
   CssBaseline,
   Grid,
   TextField,
-  Typography,
+  Typography
 } from '@mui/material'
 import LinkMui from '@mui/material/Link'
 import { emailVerify } from 'app/actions'
@@ -17,20 +17,20 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { errorHandler } from 'utils'
+import { errorHandler } from 'handlers'
 import * as yup from 'yup'
 import { AuthButtons, Copyright } from '../../components'
 
 const schema = yup.object().shape({
   email: yup.string().required('Email is a required field').email('Invalid email format').max(40),
-  password: yup.string().required('Password is a required field').min(5).max(50),
+  password: yup.string().required('Password is a required field').min(5).max(50)
 })
 
 export default function SignUp() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors }
   } = useForm({ resolver: yupResolver(schema) })
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export default function SignUp() {
 
   const onSubmit = ({ email, password }: any) => {
     errorHandler(() => {
-      signup(email, password).then(user => {
+      return signup(email, password).then((user) => {
         toast(`User with email: ${user.email} successfully registered`, { type: 'success' })
         emailVerify(user).then(() => {
           toast('Sent email verification link. Please check your spam folder', { type: 'info' })
@@ -56,7 +56,7 @@ export default function SignUp() {
           marginTop: 8,
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
+          alignItems: 'center'
         }}
       >
         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
