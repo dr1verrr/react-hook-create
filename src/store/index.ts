@@ -1,6 +1,6 @@
+import authReducer from './auth/auth.reducers'
 import rootReducer from './rootReducer'
-import store from './store'
+import store, { useAppDispatch, useAppSelector } from './store'
 import uiReducer from './ui/ui.reducers'
-import userReducer from './user/user.reducers'
 
-export { userReducer, rootReducer, store, uiReducer }
+export { store, rootReducer, uiReducer, authReducer, useAppDispatch, useAppSelector }
