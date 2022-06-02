@@ -40,7 +40,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix src/**/*",
+    "lint:fix": "eslint --fix src/**/*.{ts,tsx}",
     "prettier": "prettier 'src/**/*.{ts,tsx,json}'",
     "prettier:fix": "prettier --write \"./**/*.{ts,tsx,json}\""
   },

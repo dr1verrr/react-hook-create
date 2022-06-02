@@ -12,7 +12,6 @@
     "no-console": "warn",
     "jsx-quotes": "off",
     "prefer-const": "error",
-    "indent": ["warn", 2],
     "no-tabs": "error",
     "max-len": ["error", { "code": 100 }],
     "curly": "off",
@@ -20,7 +19,8 @@
     "prettier/prettier": [
       "error",
       {
-        "endOfLine": "auto"
+        "endOfLine": "auto",
+        "tabWidth": 2
       }
     ],
     "react/function-component-definition": [
