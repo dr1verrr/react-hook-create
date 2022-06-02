@@ -1,0 +1,16 @@
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "auth.uid == $uid",
+        ".write": "auth.uid == $uid"
+      }
+    },
+    "profiles": {
+      ".read": true,
+      "$uid": {
+        ".write": "auth.uid == $uid"
+      }
+    }
+  }
+}
