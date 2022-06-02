@@ -16,7 +16,12 @@
     "max-len": ["error", { "code": 100 }],
     "curly": "off",
     "react/react-in-jsx-scope": "off",
-    "prettier/prettier": "error",
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
     "no-mixed-spaces-and-tabs": "error"
   }
 }
