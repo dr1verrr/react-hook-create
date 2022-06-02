@@ -1,6 +1,6 @@
 import { CircularProgress } from '@mui/material'
 import { ErrorFn, NextOrObserver, User } from 'firebase/auth'
-import { FC, Suspense, lazy, useEffect } from 'react'
+import { Suspense, lazy, useEffect } from 'react'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { Provider } from 'react-redux'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
@@ -24,7 +24,7 @@ const Profile = lazy(() => import('views/Profile/Profile'))
 
 export const queryClient = new QueryClient()
 
-const App: FC = () => {
+function App() {
   const observer: NextOrObserver<User> = user => {
     const isAuthenticated = !!user
 

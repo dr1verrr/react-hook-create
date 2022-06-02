@@ -19,7 +19,7 @@ import { ThemeButton, UserAvatar } from 'components'
 import { errorHandler } from 'handlers'
 import { displayLoading, requireAuthentication } from 'hoc'
 
-const NavBar: FC = () => {
+function NavBar() {
   return (
     <AppBar
       position='sticky'

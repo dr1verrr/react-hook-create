@@ -1,7 +1,6 @@
 import { Modal, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { User } from 'firebase/auth'
-import { FC } from 'react'
 import { useDispatch } from 'react-redux'
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter'
 import json from 'react-syntax-highlighter/dist/esm/languages/prism/json'
@@ -12,7 +11,9 @@ import { setModal } from 'store/ui/ui.actions'
 
 SyntaxHighlighter.registerLanguage('json', json)
 
-const UserDetailedModal: FC<{ user: User | null | undefined }> = ({ user }) => {
+type UserDetailedModalProps = { user: User | null | undefined }
+
+function UserDetailedModal({ user }: UserDetailedModalProps) {
   const dispatch = useDispatch()
   const isOpen = useAppSelector(state => state.ui.modal.visible)
 

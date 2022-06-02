@@ -2,7 +2,7 @@ import { Avatar, AvatarProps, Skeleton } from '@mui/material'
 
 import useAuthUser from 'hooks/useAuthUser'
 
-const UserAvatar = (props: AvatarProps) => {
+function UserAvatar(props: AvatarProps) {
   const { isLoading, user } = useAuthUser()
 
   return isLoading ? (
