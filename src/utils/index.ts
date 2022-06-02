@@ -1,5 +1,6 @@
-import errorHandler from './helpers/errorHandler'
-import removeObjectField from './helpers/removeObjectField'
-import getWithSpecificFields from './helpers/user/user.getWithSpecificFields'
+import convertMessage from './helpers/convertMessage.helpers'
+import getPublicUser from './helpers/getPublicUser.helpers'
+import { loadState, saveState } from './helpers/localStorage.helpers'
+import setAndSaveState from './helpers/setAndSaveState.helpers'
 
-export { errorHandler, removeObjectField, getWithSpecificFields }
+export { loadState, saveState, getPublicUser, convertMessage, setAndSaveState }
