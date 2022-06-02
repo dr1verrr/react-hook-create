@@ -1,51 +1,48 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import {
-  Avatar,
-  Box,
-  Button,
-  Container,
-  CssBaseline,
-  Grid,
-  TextField,
-  Typography,
-} from '@mui/material'
+import { Avatar, Box, Button, Container, Grid, TextField, Typography } from '@mui/material'
 import LinkMui from '@mui/material/Link'
-import { signin } from 'app/auth'
-import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
-import { errorHandler } from 'utils'
+import { toast } from 'react-toastify'
 import * as yup from 'yup'
-import { AuthButtons, Copyright } from '../../components'
+
+import { signin } from 'app/auth'
+import { AuthButtons, Copyright } from 'components'
+import { errorHandler } from 'handlers'
 
 const schema = yup.object().shape({
   email: yup.string().required('Email is a required field').email('Invalid email format').max(40),
-  password: yup.string().required('Password is a required field').min(5).max(50),
+  password: yup.string().required('Password is a required field').min(5).max(50)
 })
+
+type FormValues = {
+  email: string
+  password: string
+}
 
 export default function SignIn() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) })
+    formState: { errors }
+  } = useForm<FormValues>({ resolver: yupResolver(schema) })
 
-  const onSubmit = (data: any) => errorHandler(() => signin(data.email, data.password))
-
-  useEffect(() => {
-    console.log(errors)
-  }, [errors])
+  const onSubmit = ({ email, password }: FormValues) => {
+    errorHandler(
+      () => signin(email, password),
+      () => toast('Signed in.', { icon: '🙌' })
+    )
+  }
 
   return (
     <Container component='main' maxWidth='xs'>
-      <CssBaseline />
       <Box
         sx={{
           marginTop: 8,
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
+          alignItems: 'center'
         }}
       >
         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
@@ -69,7 +66,7 @@ export default function SignIn() {
             label='Email Address'
             autoComplete='email'
             autoFocus
-            error={Boolean(errors?.email?.message)}
+            error={!!errors?.email?.message}
             helperText={errors?.email?.message}
             {...register('email')}
           />
@@ -80,7 +77,7 @@ export default function SignIn() {
             label='Password'
             type='password'
             id='password'
-            error={Boolean(errors?.password?.message)}
+            error={!!errors?.password?.message}
             helperText={errors?.password?.message}
             autoComplete='current-password'
             {...register('password')}
