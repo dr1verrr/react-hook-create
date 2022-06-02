@@ -1,11 +1,9 @@
-import { app } from 'app/config/firebase'
-import { getAuth, sendPasswordResetEmail } from 'firebase/auth'
-import { actionCodeSettings } from './actions_settings'
+import { sendPasswordResetEmail } from 'firebase/auth'
 
-const resetPassword = async (email: string) => {
-  const auth = getAuth(app)
+import { auth } from 'app/config/firebase'
 
-  return await sendPasswordResetEmail(auth, email, actionCodeSettings)
+const sendPasswordReset = async (email: string) => {
+  return await sendPasswordResetEmail(auth, email)
 }
 
-export default resetPassword
+export default sendPasswordReset

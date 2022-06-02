@@ -1,4 +1,5 @@
 import { Auth, getAuth } from 'firebase/auth'
-import { app } from '../config/firebase'
 
-export const getAuthData = (): Auth => getAuth(app)
+import { firebaseApp } from '../config/firebase'
+
+export const getAuthData = (): Auth => getAuth(firebaseApp)

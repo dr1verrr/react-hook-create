@@ -1,8 +1,9 @@
 import { getAuth, signInAnonymously } from 'firebase/auth'
-import { app } from '../config/firebase'
+
+import { firebaseApp } from '../config/firebase'
 
 const signAsGuest = async () => {
-  const auth = getAuth(app)
+  const auth = getAuth(firebaseApp)
 
   return await signInAnonymously(auth)
 }
