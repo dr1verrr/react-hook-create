@@ -6,7 +6,7 @@ const useAuthActions = () => {
     loginWithGithubPopup: signinWithGithubPopup,
     loginWithGooglePopup: signinWithGooglePopup,
     logout: signout,
-    register: signup,
+    register: signup
   }
 }
 
