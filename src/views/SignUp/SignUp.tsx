@@ -4,53 +4,68 @@ import {
   Avatar,
   Box,
   Button,
+  Checkbox,
   Container,
-  CssBaseline,
+  FormControlLabel,
   Grid,
   TextField,
   Typography
 } from '@mui/material'
 import LinkMui from '@mui/material/Link'
-import { emailVerify } from 'app/actions'
-import { signup } from 'app/auth'
-import { useEffect } from 'react'
+import { reload, sendEmailVerification, updateProfile } from 'firebase/auth'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { errorHandler } from 'handlers'
 import * as yup from 'yup'
-import { AuthButtons, Copyright } from '../../components'
+
+import { signup } from 'app/auth'
+import { AuthButtons, Copyright } from 'components'
+import { errorHandler } from 'handlers'
 
 const schema = yup.object().shape({
+  nickName: yup
+    .string()
+    .required('Nickname is a required field.')
+    .min(3, 'First Name must be at least 3 characters')
+    .max(30, 'First Name must be at most 30 characters')
+    .matches(/^[a-zA-Z0-9]+$/, 'This field cannot contain white space and special character'),
   email: yup.string().required('Email is a required field').email('Invalid email format').max(40),
   password: yup.string().required('Password is a required field').min(5).max(50)
 })
+
+type FormValues = {
+  nickName: string
+  email: string
+  password: string
+  remember: boolean
+}
 
 export default function SignUp() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors }
-  } = useForm({ resolver: yupResolver(schema) })
+  } = useForm<FormValues>({ resolver: yupResolver(schema) })
 
-  useEffect(() => {
-    console.log('Form errors', errors)
-  }, [errors])
+  const remember = watch('remember')
 
-  const onSubmit = ({ email, password }: any) => {
-    errorHandler(() => {
-      return signup(email, password).then((user) => {
-        toast(`User with email: ${user.email} successfully registered`, { type: 'success' })
-        emailVerify(user).then(() => {
-          toast('Sent email verification link. Please check your spam folder', { type: 'info' })
-        })
+  const onSubmit = ({ email, password, nickName }: FormValues) => {
+    errorHandler(async () => {
+      const user = await signup(email, password)
+      toast('Sign-up successfull.', { type: 'success' })
+      await updateProfile(user, { displayName: nickName })
+      reload(user)
+
+      await sendEmailVerification(user)
+      toast('Email verification sent! Please check your spam folder.', {
+        type: 'info'
       })
     })
   }
 
   return (
     <Container component='main' maxWidth='xs'>
-      <CssBaseline />
       <Box
         sx={{
           marginTop: 8,
@@ -67,7 +82,7 @@ export default function SignUp() {
         </Typography>
         <Box
           component='form'
-          autoComplete='true'
+          autoComplete={`${!!remember}`}
           noValidate
           onSubmit={handleSubmit(onSubmit)}
           sx={{ mt: 3 }}
@@ -76,12 +91,26 @@ export default function SignUp() {
             <Grid item xs={12}>
               <TextField
                 required
+                autoComplete='given-name'
+                fullWidth
+                id='nickName'
+                label='Nickname'
+                autoFocus
+                error={!!errors?.nickName}
+                helperText={errors?.nickName?.message}
+                {...register('nickName')}
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                required
                 fullWidth
                 id='email'
                 type='email'
                 label='Email Address'
                 autoComplete='email'
-                error={Boolean(errors?.email?.message)}
+                error={!!errors?.email}
                 helperText={errors?.email?.message}
                 {...register('email')}
               />
@@ -94,9 +123,17 @@ export default function SignUp() {
                 type='password'
                 id='password'
                 autoComplete='new-password'
-                error={Boolean(errors?.password?.message)}
+                error={!!errors?.password}
                 helperText={errors?.password?.message}
                 {...register('password')}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <FormControlLabel
+                control={
+                  <Checkbox color='primary' defaultValue='false' {...register('remember')} />
+                }
+                label='Remember me'
               />
             </Grid>
           </Grid>
