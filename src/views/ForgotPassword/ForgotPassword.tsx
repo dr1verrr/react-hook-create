@@ -1,31 +1,33 @@
-import { Box, Button, Container, Grid, TextField } from '@mui/material'
-import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { resetPassword } from 'app/actions'
+import { Box, Button, Container, Grid, TextField } from '@mui/material'
+import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
+import * as yup from 'yup'
+
+import { sendPasswordReset } from 'app/actions'
 import { errorHandler } from 'handlers'
 
 const schema = yup.object().shape({
   email: yup.string().required('Email is a required field').email('Invalid email format').max(40)
 })
 
+type FormValues = {
+  email: string
+}
+
 export default function ForgotPassword() {
   const {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm({ resolver: yupResolver(schema) })
+  } = useForm<FormValues>({ resolver: yupResolver(schema) })
 
-  useEffect(() => {
-    console.log(errors)
-  }, [errors])
-
-  const onSubmit = (data: any) => {
-    errorHandler(() => {
-      return resetPassword(data.email).then(() => {
-        toast(`Password reset link was sent to ${data.email}`, { type: 'info' })
+  const onSubmit = ({ email }: FormValues) => {
+    errorHandler(async () => {
+      await sendPasswordReset(email)
+      const messageOnSuccess = `Password reset link sent! Please check your spam folder.`
+      toast(messageOnSuccess, {
+        type: 'info'
       })
     })
   }
@@ -37,7 +39,12 @@ export default function ForgotPassword() {
         autoComplete='true'
         noValidate
         onSubmit={handleSubmit(onSubmit)}
-        sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+        sx={{
+          mt: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center'
+        }}
       >
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -46,7 +53,7 @@ export default function ForgotPassword() {
               id='email'
               label='Email Address'
               autoComplete='email'
-              error={Boolean(errors?.email?.message)}
+              error={!!errors?.email}
               helperText={errors?.email?.message}
               {...register('email')}
             />
