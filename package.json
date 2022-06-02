@@ -41,13 +41,8 @@
     "eject": "react-scripts eject",
     "lint": "eslint .",
     "lint:fix": "eslint --fix src/**/*",
-    "format": "prettier --write \"./**/*.{ts,tsx,json}\""
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "prettier": "prettier 'src/**/*.{ts,tsx,json}'",
+    "prettier:fix": "prettier --write \"./**/*.{ts,tsx,json}\""
   },
   "browserslist": {
     "production": [
@@ -63,6 +58,8 @@
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^3.2.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "prettier": "^2.6.2"
   }
 }
