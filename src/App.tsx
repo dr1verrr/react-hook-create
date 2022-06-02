@@ -1,62 +1,73 @@
-import { Box } from '@mui/material'
-import CircularProgress from '@mui/material/CircularProgress'
-import { Header } from 'layouts'
-import authStateListener from 'listeners/authStateListener'
-import { lazy, Suspense, useEffect, useRef } from 'react'
+import { CircularProgress } from '@mui/material'
+import { ErrorFn, NextOrObserver, User } from 'firebase/auth'
+import { FC, Suspense, lazy, useEffect } from 'react'
+import { QueryClient, QueryClientProvider } from 'react-query'
 import { Provider } from 'react-redux'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import { toast, ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import { PublicRoute } from 'routes'
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
+import { toast } from 'react-toastify'
+
+import { Layout } from 'layouts'
+import { authStateListener } from 'listeners'
+import { AuthenticatedRoute, PublicRoute } from 'routes'
 import { store } from 'store'
-import { setUser } from 'store/user/user.actions'
-import { getWithSpecificFields } from 'utils'
+import { setAuth } from 'store/auth/auth.actions'
+import { setAndSaveState } from 'utils'
+import { NotFound } from 'views'
+
 import './App.css'
 
 const Home = lazy(() => import('views/Home/Home'))
 const SignIn = lazy(() => import('views/SignIn/SignIn'))
 const SignUp = lazy(() => import('views/SignUp/SignUp'))
 const ForgotPassword = lazy(() => import('views/ForgotPassword/ForgotPassword'))
+const Profile = lazy(() => import('views/Profile/Profile'))
 
-function App(): JSX.Element {
-  const userChecked = useRef(false)
+export const queryClient = new QueryClient()
+
+const App: FC = () => {
+  const observer: NextOrObserver<User> = user => {
+    const isAuthenticated = !!user
+
+    if (!isAuthenticated) queryClient.removeQueries('user')
+
+    setAndSaveState(store.dispatch, setAuth(isAuthenticated), {
+      key: 'auth',
+      value: isAuthenticated
+    })
+  }
+
+  const onError: ErrorFn = ({ message }) => toast(message, { type: 'error' })
 
   useEffect(() => {
-    authStateListener((user: any) => {
-      store.dispatch(setUser(user ? getWithSpecificFields(user) : null))
-
-      if (userChecked.current) {
-        toast(user ? 'Authenticated' : 'Logged out', { type: 'info' })
-      }
-      if (!userChecked.current) userChecked.current = true
-    })
+    authStateListener(observer, onError)
   }, [])
 
   return (
     <Provider store={store}>
-      <ToastContainer position='bottom-right' />
-      <Router>
-        <Header />
-        <Suspense
-          fallback={
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 5 }}>
-              <CircularProgress />
-            </Box>
-          }
-        >
-          <Routes>
-            <Route element={<PublicRoute />}>
-              <Route path='/signin' element={<SignIn />} />
-              <Route path='/signup' element={<SignUp />} />
-            </Route>
-            <Route path='/' element={<Home />} />
-            <Route path='/signin' element={<SignIn />} />
-            <Route path='/signup' element={<SignUp />} />
-            <Route path='/forgot-password' element={<ForgotPassword />} />
-            <Route path='*' element={<p>There's nothing here: 404!</p>} />
-          </Routes>
-        </Suspense>
-      </Router>
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <Layout>
+            <Suspense
+              fallback={
+                <CircularProgress sx={{ position: 'absolute', left: '50px', bottom: '50px' }} />
+              }
+            >
+              <Routes>
+                <Route element={<PublicRoute />}>
+                  <Route path='/signin' element={<SignIn />} />
+                  <Route path='/signup' element={<SignUp />} />
+                  <Route path='/forgot-password' element={<ForgotPassword />} />
+                </Route>
+                <Route element={<AuthenticatedRoute />}>
+                  <Route path='/profile' element={<Profile />} />
+                </Route>
+                <Route path='/' element={<Home />} />
+                <Route path='*' element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </Layout>
+        </Router>
+      </QueryClientProvider>
     </Provider>
   )
 }
