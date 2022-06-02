@@ -10,6 +10,7 @@
   "rules": {
     "no-unused-vars": "warn",
     "no-console": "warn",
+    "jsx-quotes": "off",
     "prefer-const": "error",
     "indent": ["warn", 2],
     "no-tabs": "error",
@@ -20,6 +21,13 @@
       "error",
       {
         "endOfLine": "auto"
+      }
+    ],
+    "react/function-component-definition": [
+      2,
+      {
+        "namedComponents": "function-declaration",
+        "unnamedComponents": "arrow-function"
       }
     ],
     "no-mixed-spaces-and-tabs": "error"
