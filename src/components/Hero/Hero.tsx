@@ -1,7 +1,7 @@
 import { Box, Button, Container, Typography } from '@mui/material'
 import { FC } from 'react'
 
-const Hero: FC = () => {
+function Hero() {
   return (
     <Box
       component='header'

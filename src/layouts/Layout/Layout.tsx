@@ -12,7 +12,7 @@ type Props = {
   children: ReactNode
 }
 
-const Layout: FC<Props> = ({ children }) => {
+function Layout({ children }: Props) {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
   const useSelector = useAppSelector
   const themeSelector = useSelector(state => state.ui.theme)
