@@ -1,7 +1,11 @@
 import { combineReducers } from 'redux'
-import uiReducer from './ui/ui.reducers'
-import userReducer from './user/user.reducers'
 
-const rootReducer = combineReducers({ ui: uiReducer, user: userReducer })
+import authReducer from './auth/auth.reducers'
+import uiReducer from './ui/ui.reducers'
+
+const rootReducer = combineReducers({
+  ui: uiReducer,
+  auth: authReducer
+})
 
 export default rootReducer
