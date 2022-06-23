@@ -1,12 +1,19 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { queryClient } from 'App'
 import { User } from 'firebase/auth'
 import { useEffect, useState } from 'react'
-import { useQuery } from 'react-query'
+import { UseQueryResult, useQuery } from 'react-query'
 
 import { getCurrentUser } from 'app/auth'
 import { idTokenListener } from 'listeners'
 
-const useAuthUser = () => {
+export type UserQuery = {
+  user: User | null | undefined
+  isLoading: boolean
+  query: UseQueryResult<User | null>
+}
+
+const useAuthUser = (): UserQuery => {
   const [isLoading, setLoading] = useState(false)
   const query = useQuery('user', getCurrentUser)
   const [user, setUser] = useState<User | null>()
@@ -29,7 +36,7 @@ const useAuthUser = () => {
     }
   }, [isUserChecked])
 
-  return { user, isLoading, refetch: query.refetch }
+  return { user, isLoading, query }
 }
 
 export default useAuthUser
