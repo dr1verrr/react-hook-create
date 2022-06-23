@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 
 import { switchTheme } from 'store/ui/ui.actions'
 
-const ThemeButton = (props: IconButtonProps) => {
+function ThemeButton(props: IconButtonProps) {
   const dispatch = useDispatch()
   const toggleMode = () => dispatch(switchTheme())
   const {
