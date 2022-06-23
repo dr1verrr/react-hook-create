@@ -1,7 +1,9 @@
+import InfoIcon from '@mui/icons-material/Info'
 import MenuIcon from '@mui/icons-material/Menu'
 import {
   AppBar,
   Button,
+  ButtonGroup,
   Container,
   IconButton,
   LinearProgress,
@@ -10,16 +12,68 @@ import {
   Typography
 } from '@mui/material'
 import { Box } from '@mui/system'
-import { FC } from 'react'
+import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { toast } from 'react-toastify'
 
-import { signout } from 'app/auth'
-import { ThemeButton, UserAvatar } from 'components'
-import { errorHandler } from 'handlers'
+import { ThemeButton } from 'components/buttons'
+import { UserAvatar } from 'components/user'
 import { displayLoading, requireAuthentication } from 'hoc'
+import { toggleSidebar } from 'store/ui/ui.actions'
 
 function NavBar() {
+  const dispatch = useDispatch()
+  const menuHandler = () => dispatch(toggleSidebar())
+
+  type NavButton = {
+    id: number
+    element: JSX.Element | null
+  }
+
+  const navButtons: NavButton[] = [
+    {
+      id: 0,
+      element: (
+        <ButtonGroup sx={{ mr: 2, display: { xs: 'none', md: 'block' } }}>
+          <Button color='inherit' sx={{ textTransform: 'none' }}>
+            Save Hook
+          </Button>
+          <Button color='inherit' sx={{ textTransform: 'none' }}>
+            Hooks
+          </Button>
+        </ButtonGroup>
+      )
+    },
+    {
+      id: 1,
+      element: <ThemeButton sx={{ mr: 1 }} />
+    },
+    {
+      id: 2,
+      element: requireAuthentication(
+        <Link to='/profile'>
+          <IconButton sx={{ mr: 1 }}>
+            <UserAvatar sx={{ width: '24px', height: '24px' }} />
+          </IconButton>
+        </Link>,
+        <Link to='/signin'>
+          <Button variant='text' color='inherit'>
+            Sign in
+          </Button>
+        </Link>
+      )
+    },
+    {
+      id: 3,
+      element: (
+        <Link to='/about' style={{ marginLeft: 10 }}>
+          <Button color='info' startIcon={<InfoIcon />}>
+            About
+          </Button>
+        </Link>
+      )
+    }
+  ]
+
   return (
     <AppBar
       position='sticky'
@@ -31,67 +85,42 @@ function NavBar() {
           sx={{ position: 'absolute', left: 0, bottom: 0, right: 0, height: '2px' }}
         />
       )}
-      <Container maxWidth='lg'>
-        <Toolbar variant='dense' sx={{ pt: { xs: 1, sm: 0 }, pb: { xs: 1, sm: 0 } }}>
+      <Container maxWidth='lg' disableGutters sx={{ padding: '0 15px' }}>
+        <Toolbar variant='dense' sx={{ pt: { xs: 1, md: 0 }, pb: { xs: 1, md: 0 } }} disableGutters>
           <Stack direction='row' justifyContent='space-between' alignItems='center' width='100%'>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <IconButton
                 color='inherit'
                 aria-label='menu'
-                sx={{ display: { xs: 'flex', sm: 'none' } }}
+                onClick={menuHandler}
+                sx={{ display: { xs: 'flex', md: 'none' } }}
               >
                 <MenuIcon />
               </IconButton>
-              <Link to='/'>
-                <Typography
-                  component='div'
-                  fontSize='18px'
-                  pt={2}
-                  pb={2}
-                  sx={{
-                    transition: 'opacity .2s',
-                    display: {
-                      xs: 'none',
-                      sm: 'block'
-                    },
-                    ':hover': {
-                      opacity: 0.75
-                    }
-                  }}
-                >
-                  React Hook Cheatsheet
-                </Typography>
-              </Link>
-            </Box>
-
-            <Stack direction='row' alignItems='center'>
-              <Button sx={{ textTransform: 'none', mr: 1, pl: 2, pr: 2 }}>Save Hook</Button>
-
-              {requireAuthentication(
-                <Link to='/profile'>
-                  <IconButton sx={{ mr: 1 }}>
-                    <UserAvatar sx={{ width: '30px', height: '30px' }} />
-                  </IconButton>
-                </Link>
-              )}
-              <ThemeButton sx={{ mr: 1 }} />
-
-              {requireAuthentication(
-                <Button
-                  variant='text'
-                  color='inherit'
-                  onClick={() =>
-                    errorHandler(signout, () => toast('Sign-out successfull.', { icon: '👋' }))
+              <Typography
+                component={Link}
+                to='/'
+                fontSize='18px'
+                pt={2}
+                pb={2}
+                sx={{
+                  transition: 'opacity .2s',
+                  display: {
+                    xs: 'none',
+                    md: 'block'
+                  },
+                  ':hover': {
+                    opacity: 0.75
                   }
-                >
-                  Sign out
-                </Button>,
-                <Link to='/signin'>
-                  <Button variant='text' color='inherit'>
-                    Sign in
-                  </Button>
-                </Link>
-              )}
+                }}
+              >
+                React Hook Cheatsheet
+              </Typography>
+            </Box>
+            <Stack direction='row' alignItems='center'>
+              {navButtons.map(({ id, element }) => (
+                <Box key={id}>{element}</Box>
+              ))}
             </Stack>
           </Stack>
         </Toolbar>
