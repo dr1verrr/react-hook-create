@@ -23,7 +23,7 @@ const codeSample = `const useArray = (initialValue = []) => {
 }
 `
 
-const Features = () => {
+function Features() {
   return (
     <Container maxWidth='lg' component='main'>
       <Box component='section' pt='30px' pb='30px'>

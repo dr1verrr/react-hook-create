@@ -1,5 +1,4 @@
 import { Box, Button, Container, Typography } from '@mui/material'
-import { FC } from 'react'
 
 function Hero() {
   return (
