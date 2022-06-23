@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/material'
 
 import backgroundImage from './assets/background_2560x1440.jpg'
 
-const NotFound = () => {
+function NotFound() {
   return (
     <Box position='relative' overflow='hidden' minHeight={'calc(100vh - 58px)'}>
       <img
@@ -22,7 +22,7 @@ const NotFound = () => {
           overflow: 'hidden'
         }}
       />
-      <Box display='flex' justifyContent={'center'} padding='15px' flexWrap='wrap' columnGap='10px'>
+      <Box display='flex' justifyContent='center' padding='15px' flexWrap='wrap' columnGap='10px'>
         <Typography variant='h4' fontWeight='700' color='red'>
           404 |
         </Typography>

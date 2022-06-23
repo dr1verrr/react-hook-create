@@ -14,7 +14,7 @@ import { saveState } from 'utils'
 
 import './App.css'
 
-const queryClient = new QueryClient()
+export const queryClient = new QueryClient()
 
 function App() {
   const observer: NextOrObserver<User> = user => {

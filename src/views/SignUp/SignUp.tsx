@@ -19,7 +19,8 @@ import { toast } from 'react-toastify'
 import * as yup from 'yup'
 
 import { signup } from 'app/auth'
-import { AuthButtons, Copyright } from 'components'
+import { Copyright } from 'components'
+import { AuthButtons } from 'components/buttons'
 import { errorHandler } from 'handlers'
 
 const schema = yup.object().shape({
