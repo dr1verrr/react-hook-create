@@ -1,7 +1,7 @@
-import { FC, lazy } from 'react'
+import { lazy } from 'react'
 
-const Hero = lazy(() => import('components/Hero/Hero'))
-const Features = lazy(() => import('components/Features/Features'))
+const Hero = lazy(() => import('components/home/Hero'))
+const Features = lazy(() => import('components/home/Features'))
 
 function Home() {
   return (
