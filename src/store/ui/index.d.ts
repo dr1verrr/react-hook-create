@@ -2,12 +2,9 @@ import { PaletteMode } from '@mui/material'
 
 type State = {
   errors: Error[]
-  modal: {
-    message: string
-    visible: boolean
-  }
   loading: boolean
   theme: PaletteMode
+  sidebar: boolean
 }
 
 type Action = {
