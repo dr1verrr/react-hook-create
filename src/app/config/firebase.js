@@ -1,10 +1,6 @@
 import { initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 
-//import { createFirestoreInstance } from 'redux-firestore'
-
-//import { store } from 'store'
-
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
@@ -18,17 +14,5 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig)
 
 const auth = getAuth(firebaseApp)
-
-//const rrfConfig = {
-//  userProfile: 'users',
-//  useFirestoreForProfile: true
-//}
-
-//const rrfProps = {
-//  firebase: firebaseApp,
-//  config: rrfConfig,
-//  dispatch: store.dispatch,
-//  createFirestoreInstance
-//}
 
 export { firebaseConfig, firebaseApp, auth }
