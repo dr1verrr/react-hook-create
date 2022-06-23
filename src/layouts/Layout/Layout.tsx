@@ -1,24 +1,33 @@
-import { CssBaseline, PaletteMode, useMediaQuery } from '@mui/material'
+import { CircularProgress, CssBaseline, PaletteMode, useMediaQuery } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
-import { FC, ReactNode, useEffect, useRef, useState } from 'react'
-import { ToastContainer } from 'react-toastify'
+import PropTypes from 'prop-types'
+import { ReactNode, Suspense, lazy, useEffect, useRef, useState } from 'react'
 import 'react-toastify/dist/ReactToastify.css'
 
 import { NavBar } from 'layouts'
+import MediaQuery from 'services'
 import { useAppSelector } from 'store'
-import { loadState, setAndSaveState } from 'utils'
+import { loadState, saveState } from 'utils'
 
-type Props = {
+const SideBar = lazy(() => import('layouts/SideBar'))
+
+type LayoutProps = {
   children: ReactNode
 }
 
-function Layout({ children }: Props) {
+const ToastContainer = lazy(async () => {
+  const { ToastContainer: component } = await import('react-toastify')
+  return { default: component }
+})
+
+function Layout({ children }: LayoutProps) {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
-  const useSelector = useAppSelector
-  const themeSelector = useSelector(state => state.ui.theme)
+  const themeSelector = useAppSelector(state => state.ui.theme)
 
   const isPrefersModeChecked = useRef(false)
   const isFirstRender = useRef(true)
+
+  const getLocalTheme = () => loadState('theme')
 
   const getTheme = (mode: PaletteMode) => {
     return createTheme({
@@ -27,25 +36,23 @@ function Layout({ children }: Props) {
       }
     })
   }
-  const [theme, setTheme] = useState(getTheme(loadState('theme') || 'light'))
+  const [theme, setTheme] = useState(getTheme(getLocalTheme() || 'light'))
 
   useEffect(() => {
-    if (isPrefersModeChecked.current || !loadState('theme')) {
+    const localTheme = getLocalTheme()
+
+    if (isPrefersModeChecked.current || !localTheme) {
       const mode = prefersDarkMode ? 'dark' : 'light'
-      setAndSaveState(setTheme, getTheme(mode), {
-        key: 'theme',
-        value: mode
-      })
+      setTheme(getTheme(mode))
+      saveState('theme', mode)
     }
     if (!isPrefersModeChecked.current) isPrefersModeChecked.current = true
   }, [prefersDarkMode])
 
   useEffect(() => {
     if (!isFirstRender.current) {
-      setAndSaveState(setTheme, getTheme(themeSelector), {
-        key: 'theme',
-        value: themeSelector
-      })
+      setTheme(getTheme(themeSelector))
+      saveState('theme', themeSelector)
     } else {
       isFirstRender.current = false
     }
@@ -55,14 +62,24 @@ function Layout({ children }: Props) {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <NavBar />
-
-      <ToastContainer
-        theme={theme.palette.mode === 'dark' ? 'light' : 'dark'}
-        position='bottom-right'
-      />
-      {children}
+      <Suspense
+        fallback={<CircularProgress sx={{ position: 'absolute', left: '50px', bottom: '50px' }} />}
+      >
+        <MediaQuery query='(max-width: 900px)'>
+          <SideBar />
+        </MediaQuery>
+        <ToastContainer
+          theme={theme.palette.mode === 'dark' ? 'light' : 'dark'}
+          position='bottom-right'
+        />
+        {children}
+      </Suspense>
     </ThemeProvider>
   )
+}
+
+Layout.propTypes = {
+  children: PropTypes.node
 }
 
 export default Layout
