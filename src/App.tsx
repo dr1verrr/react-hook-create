@@ -22,11 +22,11 @@ function App() {
     saveState('auth', !!user)
   }
 
-  const onError: ErrorFn = ({ message }) => toast(message, { type: 'error' })
-
   useEffect(() => {
     authStateListener(observer, onError)
   }, [])
+
+  const onError: ErrorFn = ({ message }) => toast(message, { type: 'error' })
 
   return (
     <Provider store={store}>
