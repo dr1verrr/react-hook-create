@@ -39,11 +39,14 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:watch": "react-scripts test --watch",
+    "test:coverage": "react-scripts test --coverage",
     "eject": "react-scripts eject",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix src/**/*.{ts,tsx}",
-    "prettier": "prettier 'src/**/*.{ts,tsx,json}'",
-    "prettier:fix": "prettier --write \"./**/*.{ts,tsx,json}\""
+    "lint:fix": "eslint --fix .",
+    "prettier": "prettier 'src/**/*.{js,ts,tsx,json}'",
+    "prettier:fix": "prettier --write \"./**/*.{ts,tsx,json}\"",
+    "prepare": "husky install"
   },
   "browserslist": {
     "production": [
@@ -58,9 +61,19 @@
     ]
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.0.3",
+    "@commitlint/config-conventional": "^17.0.3",
     "@trivago/prettier-plugin-sort-imports": "^3.2.0",
+    "cz-conventional-changelog": "3.3.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.0.3",
     "prettier": "^2.6.2"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
