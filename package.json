@@ -45,8 +45,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "prettier": "prettier 'src/**/*.{js,ts,tsx,json}'",
-    "prettier:fix": "prettier --write \"./**/*.{ts,tsx,json}\"",
-    "prepare": "husky install"
+    "prettier:fix": "prettier --write \"./**/*.{ts,tsx,json}\""
   },
   "browserslist": {
     "production": [
