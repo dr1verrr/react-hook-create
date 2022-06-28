@@ -35,8 +35,8 @@ export default function SideBar() {
     text?: JSX.Element | null | string
   }
   const listItems: SideBarListItem[] = [
-    { id: 0, icon: <InboxIcon />, text: 'Hooks' },
-    { id: 1, icon: <LibraryAddIcon />, text: 'Save Hook' }
+    { id: 0, icon: <InboxIcon />, text: 'explore hooks' },
+    { id: 1, icon: <LibraryAddIcon />, text: 'store hook' }
   ]
 
   return (

@@ -35,10 +35,10 @@ function NavBar() {
       element: (
         <ButtonGroup sx={{ mr: 2, display: { xs: 'none', md: 'block' } }}>
           <Button color='inherit' sx={{ textTransform: 'none' }}>
-            Save Hook
+            store hook
           </Button>
           <Button color='inherit' sx={{ textTransform: 'none' }}>
-            Hooks
+            hooks
           </Button>
         </ButtonGroup>
       )
