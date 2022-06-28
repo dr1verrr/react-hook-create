@@ -7,7 +7,6 @@ import signout from './auth_sign_out'
 import signin from './auth_signin_password'
 import signup from './auth_signup_password'
 
-
 export {
   signin,
   signup,

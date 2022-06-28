@@ -15,7 +15,7 @@ function Profile() {
 
   return (
     <Container disableGutters sx={{ p: '0 15px' }}>
-      <Typography variant='h3' pt={2}>
+      <Typography variant='h5' pt={2}>
         Profile
       </Typography>
       <UserDashboard {...userQuery} />

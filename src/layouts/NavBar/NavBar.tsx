@@ -35,7 +35,7 @@ function NavBar() {
       element: (
         <ButtonGroup sx={{ mr: 2, display: { xs: 'none', md: 'block' } }}>
           <Button color='inherit' sx={{ textTransform: 'none' }}>
-            store hook
+            store
           </Button>
           <Button color='inherit' sx={{ textTransform: 'none' }}>
             hooks
@@ -65,10 +65,10 @@ function NavBar() {
     {
       id: 3,
       element: (
-        <Link to='/about' style={{ marginLeft: 10 }}>
-          <Button color='info' startIcon={<InfoIcon />}>
-            About
-          </Button>
+        <Link to='/about'>
+          <IconButton>
+            <InfoIcon color='info' />
+          </IconButton>
         </Link>
       )
     }
