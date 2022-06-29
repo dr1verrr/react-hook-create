@@ -1,10 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useAppSelector } from 'store'
 
-function requireAuthentication(
-  element: JSX.Element | null,
-  alternativeEl?: JSX.Element
-): null | JSX.Element {
+function requireAuth(element: JSX.Element | null, alternativeEl?: JSX.Element): null | JSX.Element {
   const useSelector = useAppSelector
   const isAuthenticated = useSelector(state => state.auth)
 
@@ -13,4 +10,4 @@ function requireAuthentication(
   return null
 }
 
-export default requireAuthentication
+export default requireAuth

@@ -1,5 +1,5 @@
 import displayLoading from './displayLoading/displayLoading'
-import requireAuthentication from './requireAuthentication/requireAuthentication'
+import requireAuth from './requireAuth/requireAuth'
 import withRouter from './withRouter/withRouter'
 
-export { displayLoading, requireAuthentication, withRouter }
+export { displayLoading, requireAuth, withRouter }
