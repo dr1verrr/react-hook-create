@@ -16,7 +16,7 @@
     "no-unused-vars": "warn",
     "no-console": "warn",
     "jsx-quotes": "off",
-    "prefer-const": "error",
+    "prefer-const": "off",
     "no-tabs": "error",
     "curly": "off",
     "react/react-in-jsx-scope": "off",
