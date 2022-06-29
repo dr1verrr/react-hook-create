@@ -1,4 +1,5 @@
 import { Box, Button, Container, Typography } from '@mui/material'
+import { Link } from 'react-router-dom'
 
 function Hero() {
   return (
@@ -25,23 +26,25 @@ function Hero() {
         <Typography fontSize='24px' mb={3}>
           A List with your Favorite Hooks.
         </Typography>
-        <Button
-          variant='contained'
-          sx={{
-            color: '#000',
-            background: '#ebedf0',
-            fontWeight: 'bold',
-            fontSize: '20px',
-            paddingLeft: '30px',
-            paddingRight: '30px',
-            textTransform: 'none',
-            ':hover': {
-              background: '#c8c9cc'
-            }
-          }}
-        >
-          Get Started
-        </Button>
+        <Link to='/store'>
+          <Button
+            variant='contained'
+            sx={{
+              color: '#000',
+              background: '#ebedf0',
+              fontWeight: 'bold',
+              fontSize: '20px',
+              paddingLeft: '30px',
+              paddingRight: '30px',
+              textTransform: 'none',
+              ':hover': {
+                background: '#c8c9cc'
+              }
+            }}
+          >
+            Get Started
+          </Button>
+        </Link>
       </Container>
     </Box>
   )
