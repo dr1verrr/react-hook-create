@@ -17,7 +17,7 @@ import { Link } from 'react-router-dom'
 
 import { ThemeButton } from 'components/buttons'
 import { UserAvatar } from 'components/user'
-import { displayLoading, requireAuthentication } from 'hoc'
+import { displayLoading, requireAuth } from 'hoc'
 import { toggleSidebar } from 'store/ui/ui.actions'
 
 function NavBar() {
@@ -34,12 +34,16 @@ function NavBar() {
       id: 0,
       element: (
         <ButtonGroup sx={{ mr: 2, display: { xs: 'none', md: 'block' } }}>
-          <Button color='inherit' sx={{ textTransform: 'none' }}>
-            store
-          </Button>
-          <Button color='inherit' sx={{ textTransform: 'none' }}>
-            hooks
-          </Button>
+          <Box component={Link} to='/store' mr={1}>
+            <Button color='inherit' sx={{ textTransform: 'none' }}>
+              store
+            </Button>
+          </Box>
+          <Box component={Link} to='/hooks'>
+            <Button color='inherit' sx={{ textTransform: 'none' }}>
+              hooks
+            </Button>
+          </Box>
         </ButtonGroup>
       )
     },
@@ -49,7 +53,7 @@ function NavBar() {
     },
     {
       id: 2,
-      element: requireAuthentication(
+      element: requireAuth(
         <Link to='/profile'>
           <IconButton sx={{ mr: 1 }}>
             <UserAvatar sx={{ width: '24px', height: '24px' }} />
