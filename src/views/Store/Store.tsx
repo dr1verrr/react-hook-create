@@ -28,52 +28,56 @@ some links here:
 
 */
 import { yupResolver } from '@hookform/resolvers/yup'
-import HighlightOffIcon from '@mui/icons-material/HighlightOff'
-import { Box, Chip, Container, Grid, TextField } from '@mui/material'
-import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react'
+import { Box, Container, Grid, TextField } from '@mui/material'
+import { ChangeEvent, forwardRef, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
+
+import Tags from 'components/store/Tags'
 
 const schema = yup.object().shape({
   name: yup.string().required('Name is required.').max(30),
   description: yup.string().max(5000).optional().notRequired(),
   notes: yup.string().max(1000).optional().notRequired(),
   code: yup.string().required('Code is required.').max(20000),
-  related: yup.string().optional().notRequired(),
-  tag: yup.string().min(3).max(30).trim()
+  related: yup.array().of(
+    yup.object().shape({
+      id: yup.number(),
+      name: yup.string()
+    })
+  ),
+  tags: yup.array().of(
+    yup.object().shape({
+      id: yup.number(),
+      label: yup.string()
+    })
+  )
 })
 
-interface StoreHookFormInputs {
-  name: string
-  tag?: string
-  description?: string
-  notes?: string
-  related?: string
-  code: string
-}
+//TODO: decompose all related with (name, tag) logic
 
 type Tag = {
   id: number
   label: string
 }
 
-//TODO: decompose all related with (name, tag) logic
-
 export default function Store() {
-  const [tags, setTags] = useState<Tag[]>([])
+  const tags = useRef<Tag[]>([])
 
   const {
     register,
     handleSubmit,
     setValue,
-    setError,
-    getValues,
-    clearErrors,
     formState: { errors }
-  } = useForm<StoreHookFormInputs>({
+  } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      name: 'use'
+      name: 'use',
+      description: '',
+      notes: '',
+      code: '',
+      related: [],
+      tags: []
     }
   })
 
@@ -101,42 +105,6 @@ export default function Store() {
     }
   }
 
-  const handleTagChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    const tag = value.trim()
-
-    //const validateTag = () => {}
-
-    if (value.includes(' ')) {
-      let hasError = false
-
-      if (tags.findIndex(t => t.label === tag) > -1) {
-        setError('tag', { type: 'validate', message: 'tag is already exist.' })
-        hasError = true
-      }
-
-      if (!hasError) {
-        yup
-          .reach(schema, 'tag')
-          .validate(tag)
-          .then(() => {
-            clearErrors('tag')
-            setTags(prev => [...prev, { id: tags.length, label: tag }])
-          })
-          .catch((err: any) => {
-            setError('tag', { type: 'validate', message: err.message })
-          })
-      }
-      setValue('tag', '')
-    }
-  }
-
-  const onTagKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Backspace' && getValues().tag === '') {
-      setTags(tags => tags.filter((_, idx) => idx !== tags.length - 1))
-    }
-  }
-
   const onSubmit = () => {}
 
   return (
@@ -157,48 +125,7 @@ export default function Store() {
             />
           </Grid>
           <Grid item xs={6}>
-            <Box flexDirection='column' display='flex' alignItems='flex-start'>
-              {!tags.length && (
-                <TextField
-                  variant='standard'
-                  label='#tags'
-                  spellCheck={false}
-                  error={!!errors?.tag?.message}
-                  helperText={errors?.tag?.message}
-                  {...register('tag', { onChange: handleTagChange })}
-                />
-              )}
-
-              <Grid container spacing={1} mt={2}>
-                {tags.map(tag => (
-                  <Grid key={tag.id} item>
-                    <Chip
-                      color='primary'
-                      key={tag.id}
-                      label={tag.label}
-                      variant='outlined'
-                      deleteIcon={<HighlightOffIcon />}
-                      onDelete={() => {
-                        setTags(tags => tags.filter(t => t.id !== tag.id))
-                      }}
-                    />
-                  </Grid>
-                ))}
-                {tags.length > 0 && tags.length !== 10 && (
-                  <Grid item>
-                    <TextField
-                      onKeyDown={onTagKeyDown}
-                      autoFocus
-                      variant='standard'
-                      spellCheck={false}
-                      error={!!errors?.tag?.message}
-                      helperText={errors?.tag?.message}
-                      {...register('tag', { onChange: handleTagChange })}
-                    />
-                  </Grid>
-                )}
-              </Grid>
-            </Box>
+            <Tags tagsRef={tags} />
           </Grid>
         </Grid>
       </Box>
