@@ -33,10 +33,12 @@ export default function SideBar() {
     id: number
     icon?: JSX.Element | null
     text?: JSX.Element | null | string
+    link: string
   }
+
   const listItems: SideBarListItem[] = [
-    { id: 0, icon: <InboxIcon />, text: 'explore hooks' },
-    { id: 1, icon: <LibraryAddIcon />, text: 'store' }
+    { id: 0, icon: <InboxIcon />, text: 'explore hooks', link: '/explore' },
+    { id: 1, icon: <LibraryAddIcon />, text: 'store', link: '/store' }
   ]
 
   return (
@@ -73,13 +75,15 @@ export default function SideBar() {
               </Container>
             </ListItem>
             <Divider />
-            {listItems.map(({ id, icon, text }) => (
-              <ListItem key={id} disablePadding>
-                <ListItemButton>
-                  {icon && <ListItemIcon>{icon}</ListItemIcon>}
-                  {text && <ListItemText>{text}</ListItemText>}
-                </ListItemButton>
-              </ListItem>
+            {listItems.map(({ id, icon, text, link }) => (
+              <Link to={link} key={id}>
+                <ListItem disablePadding>
+                  <ListItemButton>
+                    {icon && <ListItemIcon>{icon}</ListItemIcon>}
+                    {text && <ListItemText>{text}</ListItemText>}
+                  </ListItemButton>
+                </ListItem>
+              </Link>
             ))}
           </Box>
         </List>
