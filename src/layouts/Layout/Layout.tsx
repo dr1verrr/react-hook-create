@@ -2,6 +2,7 @@ import { CircularProgress, CssBaseline, PaletteMode, useMediaQuery } from '@mui/
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import PropTypes from 'prop-types'
 import { ReactNode, Suspense, lazy, useEffect, useRef, useState } from 'react'
+import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 import { NavBar } from 'layouts'
@@ -14,11 +15,6 @@ const SideBar = lazy(() => import('layouts/SideBar'))
 type LayoutProps = {
   children: ReactNode
 }
-
-const ToastContainer = lazy(async () => {
-  const { ToastContainer: component } = await import('react-toastify')
-  return { default: component }
-})
 
 function Layout({ children }: LayoutProps) {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
@@ -36,7 +32,12 @@ function Layout({ children }: LayoutProps) {
       }
     })
   }
+
   const [theme, setTheme] = useState(getTheme(getLocalTheme() || 'light'))
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-color-mode', theme.palette.mode)
+  }, [theme])
 
   useEffect(() => {
     const localTheme = getLocalTheme()
@@ -74,6 +75,7 @@ function Layout({ children }: LayoutProps) {
         />
         {children}
       </Suspense>
+      <ToastContainer position='bottom-right' />
     </ThemeProvider>
   )
 }
