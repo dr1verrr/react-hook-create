@@ -1,24 +1,35 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
-import { Box, Chip, Grid, TextField, Typography } from '@mui/material'
+import { BaseTextFieldProps, Box, Chip, Grid, Stack, TextField, Typography } from '@mui/material'
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
-
-const schema = yup.object().shape({
-  tag: yup.string().min(3).max(30).trim()
-})
 
 type Tag = {
   id: number
   label: string
 }
 
-type TagsProps = {
+interface TagsProps extends BaseTextFieldProps {
   tagsRef: React.MutableRefObject<Tag[] | any[]>
+  containerWidth?: number | string
 }
 
-export default function Tags({ tagsRef }: TagsProps) {
+const schema = yup.object().shape({
+  tag: yup
+    .string()
+    .min(3)
+    .max(30)
+    .trim()
+    .matches(/^(?!.*[0-9]-[0-9])[a-z0-9]+(-[a-z0-9]+)?$/, 'Incorrect tag name')
+    .test(
+      'Starts with digits',
+      'tag could not start with digits', // a message can also be a function
+      value => isNaN(Number(value?.charAt(0)))
+    )
+})
+
+export default function Tags({ tagsRef, containerWidth, ...inputProps }: TagsProps) {
   const [tags, setTags] = useState<Tag[]>([])
   const {
     register,
@@ -44,20 +55,18 @@ export default function Tags({ tagsRef }: TagsProps) {
     }
 
     if (!isTagExist) {
-      yup
-        .reach(schema, 'tag')
-        .validate(tag)
-        .then(() => {
-          clearErrors('tag')
-          setTags(prev => [...prev, { id: tags.length, label: tag }])
-        })
-        .catch((err: any) => {
-          setError('tag', { type: 'validate', message: err.message })
-        })
+      try {
+        await yup.reach(schema, 'tag').validate(tag)
+
+        clearErrors('tag')
+        setTags(prev => [...prev, { id: (tags?.pop()?.id as number) + 1 || 0, label: tag }])
+      } catch (err: any) {
+        setError('tag', { type: 'validate', message: err.message })
+      }
     }
   }
 
-  const onTagKeyDown = async (e: KeyboardEvent<HTMLInputElement>) => {
+  const onKeyDown = async (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.code === 'Backspace' && getValues().tag === '') {
       setTags(tags => tags.filter((_, idx) => idx !== tags.length - 1))
     }
@@ -68,7 +77,7 @@ export default function Tags({ tagsRef }: TagsProps) {
     }
   }
 
-  const onTagChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
 
     if (value.includes(' ')) {
@@ -77,7 +86,7 @@ export default function Tags({ tagsRef }: TagsProps) {
   }
 
   return (
-    <Box>
+    <Stack direction='column'>
       <Typography variant='caption'>{tags.length}/10</Typography>
       <Box flexDirection='column' display='flex' alignItems='flex-start'>
         {!tags.length && (
@@ -87,12 +96,13 @@ export default function Tags({ tagsRef }: TagsProps) {
             spellCheck={false}
             error={!!errors?.tag?.message}
             helperText={errors?.tag?.message}
-            onKeyDown={onTagKeyDown}
-            {...register('tag', { onChange: onTagChange })}
+            onKeyDown={onKeyDown}
+            {...register('tag', { onChange })}
+            {...inputProps}
           />
         )}
 
-        <Grid container spacing={1} mt={2}>
+        <Grid container spacing={1} mt={2} flexWrap='wrap' width={containerWidth || '100%'}>
           {tags.map(tag => (
             <Grid key={tag.id} item>
               <Chip
@@ -110,18 +120,19 @@ export default function Tags({ tagsRef }: TagsProps) {
           {tags.length > 0 && tags.length !== 10 && (
             <Grid item>
               <TextField
-                onKeyDown={onTagKeyDown}
                 autoFocus
                 variant='standard'
                 spellCheck={false}
                 error={!!errors?.tag?.message}
                 helperText={errors?.tag?.message}
-                {...register('tag', { onChange: onTagChange })}
+                onKeyDown={onKeyDown}
+                {...register('tag', { onChange: onChange })}
+                {...inputProps}
               />
             </Grid>
           )}
         </Grid>
       </Box>
-    </Box>
+    </Stack>
   )
 }
