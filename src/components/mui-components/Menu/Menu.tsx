@@ -2,13 +2,13 @@ import { Menu as MuiMenu, MenuProps as MuiMenuProps } from '@mui/material'
 import PropTypes from 'prop-types'
 import { Fragment, ReactElement, cloneElement, useState } from 'react'
 
-type MenuProps = {
+interface MenuProps extends Omit<MuiMenuProps, 'open'> {
   children: ReactElement[]
-  MenuButton: JSX.Element
-  menuProps: MuiMenuProps
+  openElement: JSX.Element
+  open?: boolean
 }
 
-function Menu({ children, MenuButton, menuProps }: MenuProps) {
+function Menu({ children, openElement, ...props }: MenuProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
@@ -20,13 +20,13 @@ function Menu({ children, MenuButton, menuProps }: MenuProps) {
     setAnchorEl(null)
   }
 
-  const Button = cloneElement(MenuButton, { onClick: handleClick })
+  const Button = cloneElement(openElement, { onClick: handleClick })
 
   return (
     <Fragment>
       {Button}
-      <MuiMenu {...menuProps} open={open} id='basic-menu' onClose={handleClose} anchorEl={anchorEl}>
-        {children.map((item, idx) => {
+      <MuiMenu {...props} open={open} id='basic-menu' onClose={handleClose} anchorEl={anchorEl}>
+        {children?.map((item, idx) => {
           return cloneElement(item, {
             key: idx,
             onClick: () => {
@@ -41,13 +41,11 @@ function Menu({ children, MenuButton, menuProps }: MenuProps) {
 }
 
 Menu.propTypes = {
-  MenuButton: PropTypes.element.isRequired,
-  menuProps: PropTypes.object
+  openElement: PropTypes.element.isRequired
 }
 
 Menu.defaultProps = {
-  MenuButton: null,
-  menuProps: {}
+  openElement: null
 }
 
 export default Menu

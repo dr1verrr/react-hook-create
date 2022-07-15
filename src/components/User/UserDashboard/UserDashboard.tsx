@@ -21,28 +21,20 @@ import {
 } from '@mui/material'
 import { deleteUser, reload, sendEmailVerification } from 'firebase/auth'
 import PropTypes from 'prop-types'
-import { lazy, useState } from 'react'
 import { toast } from 'react-toastify'
 
 import { signout } from 'app/auth'
-import { Menu } from 'components/mui-components'
+import { Menu, Modal } from 'components/mui-components'
 import AlertDialog from 'components/mui-components/AlertDialog'
+import CodePreview from 'components/preview/CodePreview'
 import { errorHandler } from 'handlers'
 import { UserQuery } from 'hooks/useAuthUser'
 
 import UserDashboardSkeleton from './UserDashboardSkeleton'
 
-const UserDetailedModal = lazy(() => import('components/user/UserDetailedModal'))
-
 interface Props extends UserQuery, CardProps {}
 
 function UserDashboard({ user, isLoading, ...cardProps }: Props) {
-  const [userModal, setUserModal] = useState(false)
-  const [deleteDialog, setDeleteDialog] = useState(false)
-
-  const openUserModal = () => setUserModal(true)
-  const openDeleteDialog = () => setDeleteDialog(true)
-
   if (isLoading) return <UserDashboardSkeleton {...cardProps} />
 
   if (user) {
@@ -133,7 +125,8 @@ function UserDashboard({ user, isLoading, ...cardProps }: Props) {
             Sign out
           </Button>
           <Menu
-            MenuButton={
+            keepMounted
+            openElement={
               <Button variant='contained'>
                 <MoreHorizIcon />
               </Button>
@@ -154,48 +147,51 @@ function UserDashboard({ user, isLoading, ...cardProps }: Props) {
                 </Typography>
               </Stack>
             </MenuItem>
-
-            <MenuItem onClick={openUserModal}>
-              <Stack direction='row' alignItems='center' gap={1}>
-                <InfoIcon color='info' />
-                <Typography variant='body1' color='primary'>
-                  Detailed info
-                </Typography>
-              </Stack>
-            </MenuItem>
-
-            <MenuItem onClick={openDeleteDialog}>
-              <Stack direction='row' alignItems='center' gap={1}>
-                <RemoveCircleOutlineIcon color='error' />
-                <Typography variant='body1' color='error'>
+            <Modal
+              contentMaxWidth={1200}
+              sx={{ display: 'flex', justifyContent: 'center' }}
+              openElement={
+                <MenuItem>
+                  <Stack direction='row' alignItems='center' gap={1}>
+                    <InfoIcon color='info' />
+                    <Typography variant='body1' color='primary'>
+                      Detailed info
+                    </Typography>
+                  </Stack>
+                </MenuItem>
+              }
+            >
+              <CodePreview language='json'>{JSON.stringify(user, null, 2)}</CodePreview>
+            </Modal>
+            <AlertDialog
+              openElement={
+                <MenuItem>
+                  <Stack direction='row' alignItems='center' gap={1}>
+                    <RemoveCircleOutlineIcon color='error' />
+                    <Typography variant='body1' color='error'>
+                      Delete account
+                    </Typography>
+                  </Stack>
+                </MenuItem>
+              }
+              message='Warning'
+              confirmButton={
+                <Button
+                  variant='contained'
+                  color='error'
+                  onClick={() => {
+                    errorHandler(
+                      () => deleteUser(user!),
+                      () => toast('Account deleted.', { type: 'warning' })
+                    )
+                  }}
+                >
                   Delete account
-                </Typography>
-              </Stack>
-            </MenuItem>
+                </Button>
+              }
+              declineButton={<Button variant='contained'>Close</Button>}
+            />
           </Menu>
-
-          <UserDetailedModal open={userModal} setOpen={setUserModal} user={user} />
-
-          <AlertDialog
-            open={deleteDialog}
-            setOpen={setDeleteDialog}
-            message='Warning'
-            confirmButton={
-              <Button
-                variant='contained'
-                color='error'
-                onClick={() => {
-                  errorHandler(
-                    () => deleteUser(user!),
-                    () => toast('Account deleted.', { type: 'warning' })
-                  )
-                }}
-              >
-                Delete account
-              </Button>
-            }
-            declineButton={<Button variant='contained'>Close</Button>}
-          />
         </CardActions>
       </Card>
     )
