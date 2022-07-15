@@ -6,7 +6,7 @@ import Tags from './Tags'
 
 test('store', () => {
   const tagsRef = createRef()
-  render(<Tags tagsRef={tagsRef} />)
+  render(<Tags stateRef={tagsRef} />)
 
   screen.debug()
 })

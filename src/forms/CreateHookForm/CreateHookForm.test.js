@@ -1,10 +1,10 @@
 /* eslint-disable testing-library/no-debugging-utils */
 import { render, screen } from '@testing-library/react'
 
-import Store from './Store'
+import CreateHookForm from './CreateHookForm'
 
 test('store', () => {
-  render(<Store />)
+  render(<CreateHookForm />)
 
   screen.debug()
 })
