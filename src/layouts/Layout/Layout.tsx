@@ -63,19 +63,24 @@ function Layout({ children }: LayoutProps) {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <NavBar />
+
       <Suspense
         fallback={<CircularProgress sx={{ position: 'absolute', left: '50px', bottom: '50px' }} />}
       >
         <MediaQuery query='(max-width: 900px)'>
           <SideBar />
         </MediaQuery>
-        <ToastContainer
-          theme={theme.palette.mode === 'dark' ? 'light' : 'dark'}
-          position='bottom-right'
-        />
+      </Suspense>
+
+      <Suspense
+        fallback={<CircularProgress sx={{ position: 'absolute', left: '50px', bottom: '50px' }} />}
+      >
         {children}
       </Suspense>
-      <ToastContainer position='bottom-right' />
+      <ToastContainer
+        theme={theme.palette.mode === 'dark' ? 'light' : 'dark'}
+        position='bottom-right'
+      />
     </ThemeProvider>
   )
 }

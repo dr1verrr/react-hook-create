@@ -38,7 +38,7 @@ export default function SideBar() {
 
   const listItems: SideBarListItem[] = [
     { id: 0, icon: <InboxIcon />, text: 'explore hooks', link: '/explore' },
-    { id: 1, icon: <LibraryAddIcon />, text: 'store', link: '/store' }
+    { id: 1, icon: <LibraryAddIcon />, text: 'create hook', link: '/create-hook' }
   ]
 
   return (
@@ -69,7 +69,7 @@ export default function SideBar() {
                       }
                     }}
                   >
-                    React Cheatsheet
+                    React Hook Create
                   </Typography>
                 </ListItemText>
               </Container>

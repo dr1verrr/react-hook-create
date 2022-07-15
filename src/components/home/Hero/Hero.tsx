@@ -20,13 +20,13 @@ function Hero() {
     >
       <Container maxWidth='lg' sx={{ textAlign: 'center' }}>
         <Typography variant='h1' fontWeight='bold' fontSize='36px' mb={3}>
-          React Hook Cheatsheet
+          React Hook Create
         </Typography>
 
         <Typography fontSize='24px' mb={3}>
           A List with your Favorite Hooks.
         </Typography>
-        <Link to='/store'>
+        <Link to='/create-hook'>
           <Button
             variant='contained'
             sx={{

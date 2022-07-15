@@ -34,9 +34,9 @@ function NavBar() {
       id: 0,
       element: (
         <ButtonGroup sx={{ mr: 2, display: { xs: 'none', md: 'block' } }}>
-          <Box component={Link} to='/store' mr={1}>
+          <Box component={Link} to='/create-hook' mr={1}>
             <Button color='inherit' sx={{ textTransform: 'none' }}>
-              store
+              create hook
             </Button>
           </Box>
           <Box component={Link} to='/hooks'>
@@ -118,7 +118,7 @@ function NavBar() {
                   }
                 }}
               >
-                React Hook Cheatsheet
+                React Hook Create
               </Typography>
             </Box>
             <Stack direction='row' alignItems='center'>
