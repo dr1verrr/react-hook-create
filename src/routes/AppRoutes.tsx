@@ -10,7 +10,7 @@ const SignUp = lazy(() => import('views/SignUp'))
 const ForgotPassword = lazy(() => import('views/ForgotPassword'))
 const Profile = lazy(() => import('views/Profile'))
 const About = lazy(() => import('views/About'))
-const Store = lazy(() => import('views/Store'))
+const CreateHookPage = lazy(() => import('views/CreateHookPage/CreateHookPage'))
 const NotFound = lazy(() => import('views/NotFound'))
 
 function AppRoutes() {
@@ -24,9 +24,10 @@ function AppRoutes() {
         <Route path='/forgot-password' element={<ForgotPassword />} />
       </Route>
       <Route element={<AuthenticatedRoute />}>
-        <Route path='/store' element={<Store />} />
+        <Route path='/create-hook' element={<CreateHookPage />} />
         <Route path='/profile' element={<Profile />} />
       </Route>
+
       <Route path='/about' element={<About />} />
     </Routes>
   )
